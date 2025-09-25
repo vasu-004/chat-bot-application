@@ -1,0 +1,37 @@
+name: Frontend Dev Server
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  start-frontend:
+    name: Start Frontend Server
+    runs-on: ubuntu-latest
+    timeout-minutes: 15  # Adjust as needed
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Install frontend dependencies
+        working-directory: ./client
+        run: npm install
+
+      - name: Start frontend development server
+        working-directory: ./client
+        run: npm start &
+
+      - name: Keep workflow alive
+        run: |
+          echo "Frontend server is running..."
+          sleep 300  # Keeps workflow alive for 5 minutes
